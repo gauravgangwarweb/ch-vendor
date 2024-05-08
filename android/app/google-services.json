@@ -1,0 +1,119 @@
+{
+  "project_info": {
+    "project_number": "359390674566",
+    "firebase_url": "https://casted-heights-1ec90-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "casted-heights-1ec90",
+    "storage_bucket": "casted-heights-1ec90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359390674566:android:f820b8e9358fc508e01b07",
+        "android_client_info": {
+          "package_name": "com.gauravgangwarweb.chvendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359390674566-rdqcj6q36l4gm94gjk7dmdmnvtiih357.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjiGlIp1_hySCmoqGLhHn3snFAVj_VDCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359390674566-rdqcj6q36l4gm94gjk7dmdmnvtiih357.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "359390674566-3p3u6mejih2ns1ni9dk6s0vc41vv5m9l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.project.castedheights"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359390674566:android:980492937df0f771e01b07",
+        "android_client_info": {
+          "package_name": "com.ohyajk.chteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359390674566-rdqcj6q36l4gm94gjk7dmdmnvtiih357.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjiGlIp1_hySCmoqGLhHn3snFAVj_VDCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359390674566-rdqcj6q36l4gm94gjk7dmdmnvtiih357.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "359390674566-3p3u6mejih2ns1ni9dk6s0vc41vv5m9l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.project.castedheights"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359390674566:android:4cb9748d1991d1d1e01b07",
+        "android_client_info": {
+          "package_name": "com.project.castedheights"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359390674566-rdqcj6q36l4gm94gjk7dmdmnvtiih357.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjiGlIp1_hySCmoqGLhHn3snFAVj_VDCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359390674566-rdqcj6q36l4gm94gjk7dmdmnvtiih357.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "359390674566-3p3u6mejih2ns1ni9dk6s0vc41vv5m9l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.project.castedheights"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

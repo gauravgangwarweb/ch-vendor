@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>359390674566-vt01lcetdo5dtg8ktd01vqad7ujjq4c8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.359390674566-vt01lcetdo5dtg8ktd01vqad7ujjq4c8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCUsvWKaS1pFCAJL2-rA0k9EqV-K7d433g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>359390674566</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gauravgangwarweb.chvendor</string>
+	<key>PROJECT_ID</key>
+	<string>casted-heights-1ec90</string>
+	<key>STORAGE_BUCKET</key>
+	<string>casted-heights-1ec90.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:359390674566:ios:3ecf36642b5faaf5e01b07</string>
+	<key>DATABASE_URL</key>
+	<string>https://casted-heights-1ec90-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>
