@@ -12,12 +12,14 @@ import {
 import { Feather, Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useNavigation } from "@react-navigation/native";
 
 // assets
 const logo = require("../assets/logo.png");
 const pricingBg = require("../assets/pricing-bg.png");
 
 const OrdersDashboard = () => {
+  const navigation = useNavigation();
   const [activeButtomn, setActiveButton] = useState("New");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
