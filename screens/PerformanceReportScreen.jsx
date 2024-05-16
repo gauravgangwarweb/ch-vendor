@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 import { Link, useNavigation } from "@react-navigation/native";
@@ -26,7 +25,7 @@ const PerformanceReport = () => {
             color="black"
           />
           <Text style={styles.title}>Performance Report</Text>
-          <Link href="/vendor/performance-report-filter">
+          <Link to="/performance-report-filter">
             <FontAwesome6 name="sliders" size={24} color="black" />
           </Link>
         </View>

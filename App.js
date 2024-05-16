@@ -21,6 +21,7 @@ import EarningHistory from "./screens/EarningHistoryScreen";
 import EditProfile from "./screens/EditProfileScreen";
 import PerformanceReport from "./screens/PerformanceReportScreen";
 import ServiceDetails from "./screens/ServiceDetailsScreen";
+import PerformanceReportFilter from "./screens/PerformanceReportFilterScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -83,6 +84,7 @@ export default function App() {
                 component={PerformanceReport}
               />
               <Stack.Screen name="service-details" component={ServiceDetails} />
+              <Stack.Screen name="performance-report-filter" component={PerformanceReportFilter} />
               <Stack.Screen name="Main" component={DrawerNavigator} />
             </Stack.Navigator>
           </NavigationContainer>
