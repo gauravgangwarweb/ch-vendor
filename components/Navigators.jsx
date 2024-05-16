@@ -12,6 +12,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 // Screens
 import AddBankDetails from "../screens/AddBankDetailsScreen";
@@ -32,16 +33,17 @@ const Drawer = createDrawerNavigator();
 
 const BottomTabNavigator = () => {
   return (
+    <View style={{ flex: 1, backgroundColor: 'white', }}>
     <Tab.Navigator
-      tabBarActiveTintColor="#0CBCB7"
-      tabBarInactiveTintColor="#C6C6C6"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
           paddingVertical: 10,
         },
+        tabBarActiveTintColor: "#0CBCB7",
+        tabBarInactiveTintColor: "#C6C6C6",
       }}
     >
       <Tab.Screen
@@ -95,6 +97,7 @@ const BottomTabNavigator = () => {
         }}
       />
     </Tab.Navigator>
+    </View>
   );
 };
 
@@ -123,7 +126,7 @@ export const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       initialRouteName="DashboardBottomNavigator"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, drawerActiveBackgroundColor: "#fff" }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
@@ -131,8 +134,18 @@ export const DrawerNavigator = () => {
         component={BottomTabNavigator}
         options={{ drawerLabel: () => null, hidden: true }}
       />
-      <Drawer.Screen name="AddTeamLeader" component={AddTeamLeader} />
-      <Drawer.Screen name="PerformanceReport" component={PerformanceReport} />
+      <Drawer.Screen name="AddTeamLeader" component={AddTeamLeader} options={{
+        drawerLabel: 'Add Team Leader',
+        drawerIcon: () => (
+          <FontAwesome6 name="user-plus" size={22} color={"#0CBCB7"} />
+        ),
+      }} />
+      <Drawer.Screen name="PerformanceReport" component={PerformanceReport} options={{
+        drawerLabel: 'Performance Report',
+        drawerIcon: () => (
+          <MaterialCommunityIcons name="signal-cellular-3" size={24} color="#0CBCB7" />
+        ),
+      }} />
     </Drawer.Navigator>
   );
 };
