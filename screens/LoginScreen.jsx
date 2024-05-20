@@ -46,11 +46,11 @@ import {
             return null
           }
           if(user.user.displayName === null){
-              navigation.replace("detail");
+              navigation.replace("edit-profile");
               return null
           }
           if( user.user.emailVerified && user.user.displayName != null){
-              navigation.replace("customer");
+              navigation.replace("Main");
               return null
           }
         })

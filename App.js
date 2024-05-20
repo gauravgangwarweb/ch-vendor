@@ -38,9 +38,9 @@ export default function App() {
         if (!isVerified) {
           setStatus("verify");
         } else if (!isDetail) {
-          setStatus("detail");
+          setStatus("edit-profile");
         } else {
-          setStatus("customer");
+          setStatus("Main");
         }
       } else {
         setStatus("register");
