@@ -2,38 +2,49 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
-  KeyboardAvoidingView,
-  TextInput,
   ScrollView,
   Platform,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 const EarningHistory = () => {
   const [historyButton, setHistoryButton] = useState("earning");
+  const [earningData, setEarningData] = useState([]);
+  const [withdrawnData, setWithdrawnData] = useState([]);
+  const [totalEarning, setTotalEarning] = useState(0);
+  const [totalWithdrawn, setTotalWithdrawn] = useState(0);
+
+  useEffect(() => {
+    const fetchdata = async () => {
+      const uid = auth().currentUser.uid;
+      if (uid) {
+        const doc = await firestore().collection("vendors").doc(uid).get();
+        if (doc.exists) {
+          setEarningData(doc.data().earningData || []);
+          setWithdrawnData(doc.data().withdrawnData || []);
+          const totalEarning = earningData.reduce(
+            (sum, record) => sum + record.amount,
+            0
+          );
+          setTotalEarning(totalEarning);
+          const totalWithdrawn = withdrawnData.reduce(
+            (sum, record) => sum + record.amount,
+            0
+          );
+          setTotalWithdrawn(totalWithdrawn);
+        }
+      }
+    };
+    fetchdata();
+  }, []);
+  console.log(withdrawnData);
 
   const handleClick = (historytype) => {
     setHistoryButton(historytype);
   };
-
-  const earningData = [
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-    { name: "Casted Height", packagesNumber: 8, earning: 10000 },
-  ];
-
-  const withdrawnData = [
-    { dateTime: "5 July, 2:30 PM", amount: 10000 },
-    { dateTime: "5 July, 2:30 PM", amount: 10000 },
-    { dateTime: "5 July, 2:30 PM", amount: 10000 },
-  ];
 
   return (
     <View style={styles.container}>
@@ -48,7 +59,7 @@ const EarningHistory = () => {
               (Total {historyButton === "earning" ? "Earning" : "Withdrawn"})
             </Text>
           </View>
-          <Text style={styles.balanceText}>₹ {"50,000"}/-</Text>
+          <Text style={styles.balanceText}>₹ {historyButton === "earning" ? totalEarning : totalWithdrawn}/-</Text>
         </View>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
@@ -97,7 +108,7 @@ const EarningHistory = () => {
                           color: "#0CBCB7",
                         }}
                       >
-                        {"Casted Heights"}
+                        {data.name}
                       </Text>
                       <Text
                         style={{
@@ -107,7 +118,7 @@ const EarningHistory = () => {
                           marginTop: 4,
                         }}
                       >
-                        {"8"} Packages
+                        {data.packages} Packages
                       </Text>
                     </View>
                     <Text
@@ -117,7 +128,7 @@ const EarningHistory = () => {
                         color: "#0CBCB7",
                       }}
                     >
-                      + {"15000"}
+                      + {data.amount}
                     </Text>
                   </View>
                 ))
@@ -131,7 +142,10 @@ const EarningHistory = () => {
                 <Text>No Earning History</Text>
               ) : (
                 withdrawnData.map((data, index) => (
-                  <View key={index} style={[styles.card, { paddingVertical: 24 }]}>
+                  <View
+                    key={index}
+                    style={[styles.card, { paddingVertical: 24 }]}
+                  >
                     <View>
                       <Text
                         style={{
@@ -140,7 +154,7 @@ const EarningHistory = () => {
                           color: "#0CBCB7",
                         }}
                       >
-                        {"5 July 2:30 PM"}
+                        {data.time.toDate().toLocaleDateString()}
                       </Text>
                     </View>
                     <Text
@@ -150,7 +164,7 @@ const EarningHistory = () => {
                         color: "#0CBCB7",
                       }}
                     >
-                      + {"15000"}
+                      + {data.amount}
                     </Text>
                   </View>
                 ))
