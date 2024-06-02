@@ -5,12 +5,12 @@
     "scheme": "ch-vendor",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/appicon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0CBCB7"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -25,7 +25,7 @@
       "package": "com.gauravgangwarweb.chvendor",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0CBCB7"
       }
     },
     "plugins": [
@@ -34,6 +34,11 @@
     ],
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cd5067f1-5fb4-4d00-a2d3-5e846444591d"
+      }
     }
   }
 }
