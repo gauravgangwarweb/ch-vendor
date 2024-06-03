@@ -46,7 +46,7 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: "#C6C6C6",
       }}
     >
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Dashboard"
         component={Dashboard}
         options={{
@@ -55,8 +55,8 @@ const BottomTabNavigator = () => {
           ),
           tabBarLabel: "",
         }}
-      /> */}
-      <Tab.Screen
+      />
+      {/* <Tab.Screen
         name="OrdersDashboard"
         component={OrdersDashboard}
         options={{
@@ -65,7 +65,7 @@ const BottomTabNavigator = () => {
           ),
           tabBarLabel: "",
         }}
-      />
+      /> */}
       <Tab.Screen
         name="AddBankDetails"
         component={AddBankDetails}
