@@ -204,7 +204,7 @@ const Register = ({ navigation }) => {
             </Text>
           )}
         </TouchableOpacity>
-        <Link to="/edit-profile" style={styles.version}>
+        <Link to="/customer-query" style={styles.version}>
           v 1.0.0
         </Link>
       </View>

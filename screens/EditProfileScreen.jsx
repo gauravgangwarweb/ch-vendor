@@ -87,6 +87,15 @@ const EditProfile = ({ navigation }) => {
     }
   };
 
+  const handleLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log("User signed out!");
+        navigation.replace("login");
+      });
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -161,6 +170,9 @@ const EditProfile = ({ navigation }) => {
           <Text style={styles.loginButtonText}>
             {updating ? "Updating..." : "Save Changes"}
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleLogout()} style={styles.logoutButton}>
+          <Text style={styles.loginButtonText}>Logout</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -240,6 +252,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  logoutButton: {
+    fontSize: 16,
+    paddingVertical: 12,
+    borderRadius: 50,
+    backgroundColor: "#FF0000",
+    color: "#fff",
+    width: "100%",
     textAlign: "center",
   },
 });
