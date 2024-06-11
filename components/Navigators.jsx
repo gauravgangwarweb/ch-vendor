@@ -24,6 +24,8 @@ import PerformanceReport from "../screens/PerformanceReportScreen";
 import PerformanceReportFileter from "../screens/PerformanceReportFilterScreen";
 import ServiceDetails from "../screens/ServiceDetailsScreen";
 import Dashboard from "../screens/DashBoardScreen";
+import MyBuildings from "../screens/MyBuildings";
+import AddBuilding from "../screens/AddBuilding";
 
 //assets
 const logo = require("../assets/logo.png");
@@ -34,29 +36,29 @@ const Drawer = createDrawerNavigator();
 const BottomTabNavigator = () => {
   return (
     <View style={{ flex: 1, backgroundColor: 'white', }}>
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-          paddingVertical: 10,
-        },
-        tabBarActiveTintColor: "#0CBCB7",
-        tabBarInactiveTintColor: "#C6C6C6",
-      }}
-    >
-      <Tab.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Entypo name="home" size={22} color={color} />
-          ),
-          tabBarLabel: "",
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            borderTopLeftRadius: 25,
+            borderTopRightRadius: 25,
+            paddingVertical: 10,
+          },
+          tabBarActiveTintColor: "#0CBCB7",
+          tabBarInactiveTintColor: "#C6C6C6",
         }}
-      />
-      {/* <Tab.Screen
+      >
+        <Tab.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Entypo name="home" size={22} color={color} />
+            ),
+            tabBarLabel: "",
+          }}
+        />
+        {/* <Tab.Screen
         name="OrdersDashboard"
         component={OrdersDashboard}
         options={{
@@ -66,37 +68,37 @@ const BottomTabNavigator = () => {
           tabBarLabel: "",
         }}
       /> */}
-      <Tab.Screen
-        name="AddBankDetails"
-        component={AddBankDetails}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <FontAwesome name="bank" size={22} color={color} />
-          ),
-          tabBarLabel: "",
-        }}
-      />
-      <Tab.Screen
-        name="EarningHistory"
-        component={EarningHistory}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="clock" size={22} color={color} />
-          ),
-          tabBarLabel: "",
-        }}
-      />
-      <Tab.Screen
-        name="EditProfile"
-        component={EditProfile}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="person" size={22} color={color} />
-          ),
-          tabBarLabel: "",
-        }}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="AddBankDetails"
+          component={AddBankDetails}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name="bank" size={22} color={color} />
+            ),
+            tabBarLabel: "",
+          }}
+        />
+        <Tab.Screen
+          name="EarningHistory"
+          component={EarningHistory}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="clock" size={22} color={color} />
+            ),
+            tabBarLabel: "",
+          }}
+        />
+        <Tab.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="person" size={22} color={color} />
+            ),
+            tabBarLabel: "",
+          }}
+        />
+      </Tab.Navigator>
     </View>
   );
 };
@@ -134,6 +136,17 @@ export const DrawerNavigator = () => {
         component={BottomTabNavigator}
         options={{ drawerLabel: () => null, hidden: true }}
       />
+      <Drawer.Screen
+        name="addBuilding"
+        component={AddBuilding}
+        options={{ drawerLabel: () => null, hidden: true }}
+      />
+      <Drawer.Screen name="myBuildings" component={MyBuildings} options={{
+        drawerLabel: 'My Buildings',
+        drawerIcon: () => (
+          <MaterialCommunityIcons name="office-building" size={24} color="#0CBCB7" />
+        ),
+      }} />
       <Drawer.Screen name="AddTeamLeader" component={AddTeamLeader} options={{
         drawerLabel: 'Add Team Leader',
         drawerIcon: () => (
