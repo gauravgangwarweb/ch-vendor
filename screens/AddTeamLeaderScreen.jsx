@@ -11,15 +11,61 @@ import {
 } from "react-native";
 import { AntDesign, Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import firestore, { FieldValue } from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 // assets
 const user = require("../assets/user-pic.jpeg");
 
 const AddTeamLeader = () => {
   const navigation = useNavigation();
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const fetchTeamLeader = async (name) => {
+    console.log(name);
+    const querySnapshot = await firestore()
+      .collection("teamleaders")
+      .where("name", "==", name) // Assuming 'name' is the field you want to search by
+      .get();
+    console.log(querySnapshot.docs);
+    const docsArray = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setData(docsArray);
+  };
+
+  const handleAddTeamLeader = async (data) => {
+    try{
+      const uid = auth().currentUser.uid;
+      firestore().collection("vendors").doc(uid).set({
+        teamLeaders: {
+          ...data,
+        }
+      },
+      { merge: true }
+    )
+    .then(() => {
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "Success",
+        textBody: "Team Leader added successfully",
+      });
+      navigation.navigate("Main");
+    });
+    } catch (error) {
+      console.error("Error adding team leader: ", error);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: "Error adding team leader",
+      });
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -33,15 +79,6 @@ const AddTeamLeader = () => {
           <Text style={styles.title}>Add Team Leader</Text>
           <View></View>
         </View>
-        <View style={styles.profilePicContainer}>
-          <Image style={styles.profilePic} source={user} />
-          <Entypo
-            name="edit"
-            style={styles.editPic}
-            size={12}
-            color="#ffffff"
-          />
-        </View>
         <KeyboardAvoidingView behavior="position">
           <View style={styles.inputWrap}>
             <View style={styles.iconHolder}>
@@ -54,47 +91,44 @@ const AddTeamLeader = () => {
             </View>
             <TextInput
               style={styles.textInput}
-              label="name"
-              placeholder="Full Name"
-              keyboardType="default"
+              placeholder="Enter Team Leader's Name"
+              value={searchTerm}
+              onChangeText={setSearchTerm}
             />
           </View>
-          <View style={styles.inputWrap}>
-            <View style={styles.iconHolder}>
-              <MaterialIcons
-                name="phone-in-talk"
-                size={24}
-                color="#232323"
-                style={styles.icon}
-              />
-            </View>
-            <TextInput
-              style={styles.textInput}
-              label="mobile"
-              placeholder="Mobile Number"
-              keyboardType="phone-pad"
-            />
-          </View>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => fetchTeamLeader(searchTerm)}
+          >
+            <Text style={styles.loginButtonText}>Search</Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
-        <View style={styles.toggleContainer}>
-          <Text style={styles.toggleText}>Team Leader</Text>
-          <View>
-            <Switch
-              trackColor={{ false: "#767577", true: "#0CBCB7" }}
-              thumbColor={"#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-              style={styles.toggleSwitch}
-            />
-          </View>
-        </View>
-      </View>
-      <View style={styles.actionsContainer}>
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Done</Text>
-        </TouchableOpacity>
-        <Text style={styles.version}>v 1.0.0</Text>
+        {data.length > 0 ? (
+          data.map((item) => (
+            <View style={styles.teamLeaderCard}>
+              <View>
+                <Text key={item.mobile} style={{ fontSize: 14, fontWeight: 600 }}>
+                  {item.name}
+                </Text>
+                <Text
+                  key={item.name}
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 300,
+                    marginTop: 4,
+                  }}
+                >
+                  {item.address}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => handleAddTeamLeader(item)}>
+                  <Text style={{color: "#FF0000", fontSize: 14, fontWeight: 500}}>Add</Text>
+              </TouchableOpacity>    
+            </View>
+          ))
+        ) : (
+          <Text>No team leaders found</Text>
+        )}
       </View>
     </View>
   );
@@ -201,6 +235,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     width: "100%",
     textAlign: "center",
+    marginTop: 16,
   },
   loginButtonText: {
     color: "#fff",
@@ -208,8 +243,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  version: {
-    marginVertical: 8, // Adjust margin as needed
-    fontSize: 12,
+  teamLeaderCard: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#EFEFEF",
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 16,
   },
 });
