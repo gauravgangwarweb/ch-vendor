@@ -12,12 +12,30 @@ import {
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { Link, useNavigation } from "@react-navigation/native";
 import TeamLeaderCard from "../components/TeamLeaderCard";
+import { useEffect, useState } from "react";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 // assets
 const user = require("../assets/user-pic.jpeg");
 
 const TeamLeader = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchTeamLeaders = async () => {
+      const uid = auth().currentUser.uid;
+      if (uid) {
+        const doc = await firestore().collection("vendors").doc(uid).get();
+        if (doc.exists) {
+          setData(doc.data().teamLeaders || []);
+        }
+      }
+    };
+
+    fetchTeamLeaders();
+  }, []);
+  console.log(data);
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -36,51 +54,50 @@ const TeamLeader = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 90 }}
           >
-            <TeamLeaderCard
-              userPic={user}
-              name={"Lon Mark"}
-              contact={"+91 1235646878"}
-              buildingsNumber={"15"}
-            />
-            <TeamLeaderCard
-              userPic={user}
-              name={"Lon Mark"}
-              contact={"+91 1235646878"}
-              buildingsNumber={"15"}
-            />
-
-            <TeamLeaderCard
-              userPic={user}
-              name={"Lon Mark"}
-              contact={"+91 1235646878"}
-              buildingsNumber={"15"}
-            />
-            <TeamLeaderCard
-              userPic={user}
-              name={"Lon Mark"}
-              contact={"+91 1235646878"}
-              buildingsNumber={"15"}
-            />
-            <TeamLeaderCard
-              userPic={user}
-              name={"Lon Mark"}
-              contact={"+91 1235646878"}
-              buildingsNumber={"15"}
-            />
-            <TeamLeaderCard
-              userPic={user}
-              name={"Lon Mark"}
-              contact={"+91 1235646878"}
-              buildingsNumber={"15"}
-            />
+            {data.length > 0 ? (
+              data.map((item, index) => (
+                <View key={index} style={styles.teamLeaderCard}>
+                  <View>
+                    <Text
+                      key={item.mobile}
+                      style={{ fontSize: 14, fontWeight: 600 }}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      key={item.name}
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 300,
+                        marginTop: 4,
+                      }}
+                    >
+                      {item.address}
+                    </Text>
+                    <Text
+                      key={item.name}
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 300,
+                        marginTop: 4,
+                      }}
+                    >
+                      {item.mobile}
+                    </Text>
+                  </View>
+                </View>
+              ))
+            ) : (
+              <Text>No Team Leader</Text>
+            )}
           </ScrollView>
         </View>
       </View>
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <Link href="/vender/add-team-leader" >
           <Entypo name="plus" size={28} color="#ffffff" />
         </Link>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
