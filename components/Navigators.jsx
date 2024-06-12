@@ -26,6 +26,7 @@ import ServiceDetails from "../screens/ServiceDetailsScreen";
 import Dashboard from "../screens/DashBoardScreen";
 import MyBuildings from "../screens/MyBuildings";
 import AddBuilding from "../screens/AddBuilding";
+import TeamLeader from "../screens/TeamLeaderScreen";
 
 //assets
 const logo = require("../assets/logo.png");
@@ -157,6 +158,12 @@ export const DrawerNavigator = () => {
         drawerLabel: 'Performance Report',
         drawerIcon: () => (
           <MaterialCommunityIcons name="signal-cellular-3" size={24} color="#0CBCB7" />
+        ),
+      }} />
+      <Drawer.Screen name="TeamLeaders" component={TeamLeader} options={{
+        drawerLabel: 'Team Leaders',
+        drawerIcon: () => (
+          <Entypo name="users" size={24} color="#0CBCB7" />
         ),
       }} />
     </Drawer.Navigator>

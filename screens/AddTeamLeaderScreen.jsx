@@ -39,32 +39,36 @@ const AddTeamLeader = () => {
   };
 
   const handleAddTeamLeader = async (data) => {
-    try{
-      const uid = auth().currentUser.uid;
-      firestore().collection("vendors").doc(uid).set({
-        teamLeaders: {
-          ...data,
-        }
-      },
-      { merge: true }
-    )
-    .then(() => {
+    try {
+      const user = auth().currentUser;
+      if (!user) {
+        throw new Error("No authenticated user found.");
+      }
+      const myId = user.uid;
+      const db = firestore();
+  
+      await db.collection("teamleaders").doc(data).update({
+        vendorId: myId,
+      });
+  
+      await db.collection("teamleaders").doc(myId).update({
+        teamLeaders: FieldValue.arrayUnion(data),
+      });
+  
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
-        title: "Success",
-        textBody: "Team Leader added successfully",
+        title: "Add Team Leader",
+        textBody: "Successfully Added Team Leader",
       });
-      navigation.navigate("Main");
-    });
     } catch (error) {
-      console.error("Error adding team leader: ", error);
+      console.error("Failed to add team leader:", error);
       Toast.show({
-        type: ALERT_TYPE.DANGER,
+        type: ALERT_TYPE.ERROR,
         title: "Error",
-        textBody: "Error adding team leader",
+        textBody: "Failed to Add Team Leader",
       });
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -107,7 +111,10 @@ const AddTeamLeader = () => {
           data.map((item) => (
             <View style={styles.teamLeaderCard}>
               <View>
-                <Text key={item.mobile} style={{ fontSize: 14, fontWeight: 600 }}>
+                <Text
+                  key={item.mobile}
+                  style={{ fontSize: 14, fontWeight: 600 }}
+                >
                   {item.name}
                 </Text>
                 <Text
@@ -121,9 +128,13 @@ const AddTeamLeader = () => {
                   {item.address}
                 </Text>
               </View>
-              <TouchableOpacity onPress={() => handleAddTeamLeader(item)}>
-                  <Text style={{color: "#FF0000", fontSize: 14, fontWeight: 500}}>Add</Text>
-              </TouchableOpacity>    
+              <TouchableOpacity onPress={() => handleAddTeamLeader(item.id)}>
+                <Text
+                  style={{ color: "#FF0000", fontSize: 14, fontWeight: 500 }}
+                >
+                  Add
+                </Text>
+              </TouchableOpacity>
             </View>
           ))
         ) : (
