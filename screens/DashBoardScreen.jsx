@@ -14,15 +14,29 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-
+import { useQuery } from "@tanstack/react-query";
+import firestore, { FieldValue } from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
 // assets
 const logo = require("../assets/logo.png");
-const pricingBg = require("../assets/pricing-bg.png");
 
 const Dashboard = () => {
   const navigation = useNavigation();
-  const completed = true; //dummy data
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['repoData'],
+    queryFn: async () => {
+      const querySnapshot = await firestore()
+        .collection("buildings")
+        .get();
+      const docsArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      return docsArray;
+    }
+  })
 
+  console.log(data);
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -55,97 +69,43 @@ const Dashboard = () => {
           style={{ width: "100%", marginTop: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.card}>
-            <View style={styles.cardBody}>
-              <Text style={{ fontSize: 16, fontWeight: 700 }}>
-                {"Kalpvruksh Heights"}
-              </Text>
-              <View
-                style={{
-                  marginTop: 14,
-                  flexDirection: "row",
-                  gap: 4,
-                  alignItems: "center",
-                }}
-              >
-                <Entypo name="location-pin" size={24} color="#0CBCB7" />
-                <Text
-                  style={{ fontSize: 14, fontWeight: 600, color: "#0CBCB7" }}
-                >
-                  {"Vadodara, Gujarat"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  marginTop: 14,
-                  flexDirection: "row",
-                  gap: 6,
-                  alignItems: "center",
-                }}
-              >
-                {completed ? (
-                  <AntDesign name="checkcircle" size={18} color="black" />
-                ) : (
-                  <AntDesign name="closecircle" size={18} color="black" />
-                )}
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 500,
-                    color: completed ? "black" : "#9F9F9F",
-                  }}
-                >
-                  Cleaning Completed
-                </Text>
-              </View>
-            </View>
-            <View style={styles.cardfooter}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <View style={{ flexDirection: "row", gap: 8 }}>
-                  <AntDesign name="checkcircle" size={18} color="white" />
-                  <Text
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                  >
-                    {" Washroom Cleaning"}
-                  </Text>
+          {data?.length === 0 && <Text style={{ marginTop: 20, textAlign: 'center' }}>No building found</Text>}
+          {
+            data?.map((building, index) => {
+              return (
+                <View key={index} style={styles.card}>
+                  <View style={styles.cardBody}>
+                    <Text style={{ fontSize: 16, fontWeight: 700 }}>
+                      {building.name}
+                    </Text>
+                    <View
+                      style={{
+                        marginTop: 14,
+                        flexDirection: "row",
+                        gap: 4,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Entypo name="location-pin" size={24} color="#0CBCB7" />
+                      <Text
+                        style={{ fontSize: 14, fontWeight: 600, color: "#0CBCB7" }}
+                      >
+                        {building.landmark + ', ' + building.city}
+                      </Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity onPress={() => navigation.navigate('buildingStatus', { building: building })} style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'center', gap: 8, padding: 10, backgroundColor: '#0CBCB7', marginTop: 20 }}>
+                    <AntDesign name="piechart" size={18} color="white" />
+                    <Text
+                      style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", textAlign: 'center' }}
+                    >
+                      {" View Status"}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-                <Text
-                  style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                >
-                  {"5"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <View style={{ flexDirection: "row", gap: 8 }}>
-                  <AntDesign name="checkcircle" size={18} color="white" />
-                  <Text
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                  >
-                    {" Washroom"}
-                  </Text>
-                </View>
-                <Text
-                  style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                >
-                  {"5"}
-                </Text>
-              </View>
-            </View>
-          </View>
+              )
+            })
+          }
         </ScrollView>
       </View>
     </View>
@@ -184,7 +144,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderColor: "#0CBCB7",
     borderWidth: 1,
-    borderRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
   cardBody: {
     width: "100%",

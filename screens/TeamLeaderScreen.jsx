@@ -15,26 +15,26 @@ import TeamLeaderCard from "../components/TeamLeaderCard";
 import { useEffect, useState } from "react";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
+import { useQuery } from "@tanstack/react-query";
 
 // assets
 const user = require("../assets/user-pic.jpeg");
 
 const TeamLeader = () => {
   const navigation = useNavigation();
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const fetchTeamLeaders = async () => {
-      const uid = auth().currentUser.uid;
-      if (uid) {
-        const doc = await firestore().collection("vendors").doc(uid).get();
-        if (doc.exists) {
-          setData(doc.data().teamLeaders || []);
-        }
-      }
-    };
 
-    fetchTeamLeaders();
-  }, []);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['tlsData'],
+    queryFn: async () => {
+      const user = auth().currentUser;
+      const querySnapshot = await firestore().collection("teamleaders").where('vendorId', '==', user.uid).get();
+      const docs = await querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      return docs;
+    }
+  })
   console.log(data);
   return (
     <View style={styles.container}>
@@ -54,8 +54,8 @@ const TeamLeader = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 90 }}
           >
-            {data.length > 0 ? (
-              data.map((item, index) => (
+            {
+              data?.map((item, index) => (
                 <View key={index} style={styles.teamLeaderCard}>
                   <View>
                     <Text
@@ -87,17 +87,11 @@ const TeamLeader = () => {
                   </View>
                 </View>
               ))
-            ) : (
-              <Text>No Team Leader</Text>
-            )}
+            }
           </ScrollView>
         </View>
       </View>
-      {/* <TouchableOpacity>
-        <Link href="/vender/add-team-leader" >
-          <Entypo name="plus" size={28} color="#ffffff" />
-        </Link>
-      </TouchableOpacity> */}
+
     </View>
   );
 };
@@ -145,5 +139,12 @@ const styles = StyleSheet.create({
     right: 16,
     justifyContent: "center",
     alignItems: "center",
+  },
+  teamLeaderCard: {
+    width: "100%",
+    padding: 16,
+    borderRadius: 10,
+    backgroundColor: "#f5f5f5",
+    marginBottom: 16,
   },
 });

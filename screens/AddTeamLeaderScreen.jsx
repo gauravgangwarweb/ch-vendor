@@ -28,7 +28,8 @@ const AddTeamLeader = () => {
     console.log(name);
     const querySnapshot = await firestore()
       .collection("teamleaders")
-      .where("name", "==", name) // Assuming 'name' is the field you want to search by
+      .where("name", ">=", name)
+      .where("name", "<=", name + '\uf8ff')
       .get();
     console.log(querySnapshot.docs);
     const docsArray = querySnapshot.docs.map((doc) => ({
@@ -46,15 +47,15 @@ const AddTeamLeader = () => {
       }
       const myId = user.uid;
       const db = firestore();
-  
+
       await db.collection("teamleaders").doc(data).update({
         vendorId: myId,
       });
-  
-      await db.collection("teamleaders").doc(myId).update({
+
+      await db.collection("vendors").doc(myId).update({
         teamLeaders: FieldValue.arrayUnion(data),
       });
-  
+
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: "Add Team Leader",
@@ -138,7 +139,7 @@ const AddTeamLeader = () => {
             </View>
           ))
         ) : (
-          <Text>No team leaders found</Text>
+          <Text style={{ textAlign: 'center', marginTop: 20 }}>No team leaders found, search by typing name</Text>
         )}
       </View>
     </View>

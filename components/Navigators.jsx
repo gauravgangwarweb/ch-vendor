@@ -27,6 +27,7 @@ import Dashboard from "../screens/DashBoardScreen";
 import MyBuildings from "../screens/MyBuildings";
 import AddBuilding from "../screens/AddBuilding";
 import TeamLeader from "../screens/TeamLeaderScreen";
+import BuildingStatus from "../screens/BuildingStatus";
 
 //assets
 const logo = require("../assets/logo.png");
@@ -135,13 +136,25 @@ export const DrawerNavigator = () => {
       <Drawer.Screen
         name="DashboardBottomNavigator"
         component={BottomTabNavigator}
-        options={{ drawerLabel: () => null, hidden: true }}
+        options={{
+          drawerItemStyle: { display: 'none' }
+        }}
       />
       <Drawer.Screen
         name="addBuilding"
         component={AddBuilding}
-        options={{ drawerLabel: () => null, hidden: true }}
+        options={{
+          drawerItemStyle: { display: 'none' }
+        }}
       />
+      <Drawer.Screen
+        name="buildingStatus"
+        component={BuildingStatus}
+        options={{
+          drawerItemStyle: { display: 'none' }
+        }}
+      />
+      {/* Hidden items above */}
       <Drawer.Screen name="myBuildings" component={MyBuildings} options={{
         drawerLabel: 'My Buildings',
         drawerIcon: () => (
