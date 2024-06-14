@@ -76,24 +76,6 @@ const OrdersDashboard = () => {
           <Pressable
             style={[
               styles.button,
-              activeButtomn === "New" && styles.activeButton,
-            ]}
-            onPress={() => {
-              handleClick("New");
-            }}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                activeButtomn === "New" && styles.activeButtonText,
-              ]}
-            >
-              New
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles.button,
               activeButtomn === "Ongoing" && styles.activeButton,
             ]}
             onPress={() => {
@@ -307,7 +289,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 50,
-    width: "33%",
+    width: "49%",
     padding: 20,
     alignItems: "center",
   },

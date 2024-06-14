@@ -60,7 +60,7 @@ const BottomTabNavigator = () => {
             tabBarLabel: "",
           }}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
         name="OrdersDashboard"
         component={OrdersDashboard}
         options={{
@@ -69,7 +69,7 @@ const BottomTabNavigator = () => {
           ),
           tabBarLabel: "",
         }}
-      /> */}
+      />
         <Tab.Screen
           name="AddBankDetails"
           component={AddBankDetails}
