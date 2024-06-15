@@ -10,39 +10,56 @@ import {
   ImageBackground,
 } from "react-native";
 import { Feather, Entypo, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import firestore, { FieldValue } from "@react-native-firebase/firestore";
 
 // assets
 const logo = require("../assets/logo.png");
-const pricingBg = require("../assets/pricing-bg.png");
 
 const OrdersDashboard = () => {
   const navigation = useNavigation();
-  const [activeButtomn, setActiveButton] = useState("New");
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+  const [activeButton, setActiveButton] = useState("Ongoing");
+  const [reports, setReports] = useState([]);
+  // const [date, setDate] = useState(new Date());
+  // const [mode, setMode] = useState("date");
+  // const [show, setShow] = useState(false);
+  useEffect(() => {
+    const fetchReports = async () => {
+      const querySnapshot = await firestore().collection("report").get();
+      const docsArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setReports(docsArray);
+    };
+    fetchReports();
+  });
+  // console.log(data[0].image);
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === "ios");
+  //   setDate(currentDate);
+  // };
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-  };
+  // const showMode = (currentMode) => {
+  //   setShow(true);
+  //   setMode(currentMode);
+  // };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode("date");
-  };
+  // const showDatepicker = () => {
+  //   showMode("date");
+  // };
 
   const handleClick = (button) => {
     setActiveButton(button);
   };
+
+  const filteredReports = reports.filter(report => 
+    activeButton === "Ongoing" ? report.status === true : report.status !== true
+  );
 
   return (
     <View style={styles.container}>
@@ -76,7 +93,7 @@ const OrdersDashboard = () => {
           <Pressable
             style={[
               styles.button,
-              activeButtomn === "Ongoing" && styles.activeButton,
+              activeButton === "Ongoing" && styles.activeButton,
             ]}
             onPress={() => {
               handleClick("Ongoing");
@@ -85,7 +102,7 @@ const OrdersDashboard = () => {
             <Text
               style={[
                 styles.buttonText,
-                activeButtomn === "Ongoing" && styles.activeButtonText,
+                activeButton === "Ongoing" && styles.activeButtonText,
               ]}
             >
               Ongoing
@@ -94,7 +111,7 @@ const OrdersDashboard = () => {
           <Pressable
             style={[
               styles.button,
-              activeButtomn === "Completed" && styles.activeButton,
+              activeButton === "Completed" && styles.activeButton,
             ]}
             onPress={() => {
               handleClick("Completed");
@@ -103,14 +120,14 @@ const OrdersDashboard = () => {
             <Text
               style={[
                 styles.buttonText,
-                activeButtomn === "Completed" && styles.activeButtonText,
+                activeButton === "Completed" && styles.activeButtonText,
               ]}
             >
               Completed
             </Text>
           </Pressable>
         </View>
-        <View style={styles.dateContainer}>
+        {/* <View style={styles.dateContainer}>
           <TouchableOpacity onPress={showDatepicker}>
             <Text style={styles.dateText}>{date.toDateString()}</Text>
           </TouchableOpacity>
@@ -124,129 +141,80 @@ const OrdersDashboard = () => {
             display="default"
             onChange={onChange}
           />
-        )}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={{ fontSize: 16, fontWeight: 700 }}>
-                {"Kalpvruksh Heights"}
-              </Text>
-              <TouchableOpacity>
-                <Text
-                  style={{ fontSize: 12, fontWeight: 700, color: "#0CBCB7" }}
-                >
-                  + Team Leader
-                </Text>
+        )} */}
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 180 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {reports ? (
+            filteredReports.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  navigation.navigate("report-screen", { report: item })
+                }
+              >
+                <View style={styles.card}>
+                  <View style={styles.cardHeader}>
+                    <Text style={{ fontSize: 18, fontWeight: "700" }}>
+                      {item.description}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: "#0CBCB7",
+                      }}
+                    >
+                      {item.date.toDate().toDateString()}
+                    </Text>
+                  </View>
+                  <View style={styles.cardBody}>
+                    <Image
+                      style={{ width: 100, height: 100, borderRadius: 10 }}
+                      source={{ uri: item.image }}
+                    />
+                    <View>
+                      <View style={{ flexDirection: "row", marginBottom: 2 }}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: "#0CBCB7",
+                            marginRight: 2,
+                          }}
+                        >
+                          Issue :{" "}
+                        </Text>
+                        <Text style={{ fontSize: 14, fontWeight: "600" }}>
+                          {item.issue}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "row", marginTop: 2 }}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: "#0CBCB7",
+                            marginRight: 2,
+                          }}
+                        >
+                          Remarks :{" "}
+                        </Text>
+                        <Text style={{ fontSize: 14, fontWeight: "600" }}>
+                          {item.remarks}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
               </TouchableOpacity>
-            </View>
-            <View style={styles.cardBody}>
-              <View
-                style={{
-                  marginTop: 14,
-                  flexDirection: "row",
-                  gap: 4,
-                  alignItems: "center",
-                }}
-              >
-                <Entypo name="location-pin" size={24} color="#0CBCB7" />
-                <Text
-                  style={{ fontSize: 14, fontWeight: 600, color: "#0CBCB7" }}
-                >
-                  {"Vadodara, Gujarat"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  marginTop: 14,
-                  flexDirection: "row",
-                  gap: 6,
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons name="schedule" size={24} color="#0CBCB7" />
-                <Text
-                  style={{ fontSize: 14, fontWeight: 600, color: "#0CBCB7" }}
-                >
-                  Start Date {"20-01-2023"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: "row",
-                  gap: 6,
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons name="schedule" size={24} color="#0CBCB7" />
-                <Text
-                  style={{ fontSize: 14, fontWeight: 600, color: "#0CBCB7" }}
-                >
-                  End Date {"20-06-2023"}
-                </Text>
-              </View>
-              <Text style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>
-                Total Amount: {5000} * {150} = {7.5}
-              </Text>
-            </View>
-            <ImageBackground
-              source={pricingBg}
-              style={{
-                position: "absolute",
-                top: 75,
-                right: 0,
-                width: 113,
-                height: 38,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ fontSize: 15, fontWeight: 700, color: "#ffffff" }}>
-                ₹ {5000}/-
-              </Text>
-            </ImageBackground>
-            <View style={styles.cardfooter}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Text
-                  style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                >
-                  . {" Washroom Cleaning"}
-                </Text>
-                <Text
-                  style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                >
-                  {"5"}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Text
-                  style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                >
-                  . {" Washroom"}
-                </Text>
-                <Text
-                  style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}
-                >
-                  {"5"}
-                </Text>
-              </View>
-            </View>
-          </View>
+            ))
+          ) : (
+            <Text style={{ marginTop: 20, textAlign: "center" }}>
+              No data found
+            </Text>
+          )}
         </ScrollView>
       </View>
     </View>
@@ -311,8 +279,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: "100%",
     position: "relative",
-    paddingTop: 20,
-    borderWidth: 1,
+    paddingVertical: 10,
+    borderWidth: 2,
     borderColor: "#0CBCB7",
     borderRadius: 20,
   },
@@ -326,6 +294,9 @@ const styles = StyleSheet.create({
   cardBody: {
     width: "100%",
     paddingHorizontal: 20,
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 10,
   },
   cardfooter: {
     width: "100%",
